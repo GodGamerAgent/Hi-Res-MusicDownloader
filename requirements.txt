@@ -1,0 +1,4 @@
+beautifulsoup4==4.15.0
+ddgs==9.14.4
+Requests==2.34.2
+seleniumbase==4.50.0
