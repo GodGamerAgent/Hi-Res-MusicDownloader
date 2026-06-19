@@ -50,10 +50,11 @@ Ensure you have your preferred browser installed (Google Chrome or Brave Browser
 ### Installation
 
 1. **Clone the repository:**
-   git clone https://github.com/GodGamerAgent/Hi-Res-MusicDownloader.git
-   cd MusicDownloaderCLI 
-   
-2. **Install dependencies:**
+```bash
+git clone https://github.com/GodGamerAgent/Hi-Res-MusicDownloader.git
+cd MusicDownloaderCLI 
+```   
+3. **Install dependencies:**
 ```bash
 pip install -r requirements.txt
 ```
