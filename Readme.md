@@ -16,20 +16,28 @@ A robust, state-driven command-line utility built in Python to automatically res
 
 The architecture relies on a persistent synchronization loop between filesystem states and headless browser runtime actions:
 
-[User Paste URL] ──> [API Lookup Attempt] ──(Success)──> [Lucida Automation Engine]
-│                                    ▲
-(Fail)                               │   
-▼                                    │
-[DuckDuckGo Search] ──(Found ASIN)───────────┘
-│
-(Fail)
-▼
-[Headless Brave Search] ──(Extract ASIN)─────────> [Lucida Automation Engine]
-│
-▼
-[State-Driven Watcher Loop]
-├─> Active .crdownload ?
-└─> Complete .flac ──> [Save Location]
+```mermaid
+graph TD
+    A[User Paste URL] --> B{API Lookup Attempt}
+    
+    B -- Success --> C[Download Automation Engine]
+    B -- Fail --> D{DuckDuckGo Search}
+    
+    D -- Found ASIN --> C
+    D -- Fail --> E{Headless Browser Search}
+    
+    E -- Extract ASIN --> C
+    
+    C --> F[State-Driven Watcher Loop]
+    F --> G{Active .crdownload?}
+    G -- Yes --> F
+    G -- No / Found .flac --> H[Move to Save Location]
+
+    style A fill:#1f1f2e,stroke:#3b3b5c,stroke-width:2px,color:#fff;
+    style C fill:#1e3a1e,stroke:#2e5c2e,stroke-width:2px,color:#fff;
+    style F fill:#3a1e3a,stroke:#5c2e5c,stroke-width:2px,color:#fff;
+    style H fill:#1e2a3a,stroke:#2e435c,stroke-width:2px,color:#fff;
+```
 
 ---
 
@@ -46,10 +54,24 @@ Ensure you have your preferred browser installed (Google Chrome or Brave Browser
    cd MusicDownloaderCLI 
    
 2. **Install dependencies:**
-    pip install requests beautifulsoup4 seleniumbase duckduckgo_search
+```bash
+pip install -r requirements.txt
+```
 
 3. **Initialize the application wrapper**
-    python main.py
+```bash
+python main.py
+```
+
+4. **Follow the instruction in the Script** 
+
+---
+
+> [!IMPORTANT]
+> Feed only Apple music and Spotify link, Don't feed album or artist or any playlist link it will crash future updates will be given for fixing it. If I am free or fix it your self, Sorry
+
+---
+
 
 On your absolute first launch, the engine will safely direct you into Config Mode to register your preferred browser executable engine path and default download storage directories using an interactive native desktop folder picker box.
 
@@ -57,11 +79,13 @@ On your absolute first launch, the engine will safely direct you into Config Mod
 Your local directory adjustments, runtime tracking variables, and platform paths are synchronized straight down to a local settings.ini initialization map:
 
 **Settings.ini**
+```bash
     [parameters]
     launchNumber = 4
     Browser = brave
     location = C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe
     saveLocation = E:\MusicDownloader\Complete_Download
+```
 
 ## 📄 License
 
