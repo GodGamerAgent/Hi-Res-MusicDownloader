@@ -69,7 +69,7 @@ python main.py
 ---
 
 > [!IMPORTANT]
-> Feed only Apple music and Spotify link, Don't feed album or artist or any playlist link it will crash future updates will be given for fixing it. If I am free or fix it your self, Sorry
+> Feed only Apple music and Spotify link, Don't feed album or artist or any playlist link it will crash, future updates will be given for it, If I am free or add that feature yourself, Sorry
 
 ---
 
