@@ -26,7 +26,7 @@ def extractTrackMetadata(inUrl, type):
             return
     except Exception as e:
         print('Invalid URL')
-        return
+        exit(0)
     page.encoding = 'utf-8'
     soup = BeautifulSoup(page.content, 'html.parser')
     title = soup.title.string
@@ -118,7 +118,8 @@ def scrapper2(songName):
                 start = html_content.find('primary-href="', locator)
                 end = html_content.find('"', start + 14)
                 found_href = html_content[start + 14:end]
-                print(f"Found href: {found_href}")
+                print("Yah!!! Found the song, Initating download")
+                time.sleep(2)
                 if "/albums/" and "trackAsin" in found_href:
                     ASIN = found_href.split('trackAsin=')[-1][:10]
                     downloadViaLucida(ASIN)
@@ -320,11 +321,14 @@ def processBatch(batchFile):
                 url = url.strip()
                 print(f"Processing {url}...")
                 ASIN = songling(url)
+            exit(0)
         else:
             for url in data:
-                url = url.strip()[:-1]
+                url = url.strip()
+                url = url.replace(',', "")
                 print(f"Processing {url}...")
                 ASIN = songling(url)
+            exit(0)
 
             
 
