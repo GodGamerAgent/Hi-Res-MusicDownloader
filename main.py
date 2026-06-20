@@ -320,16 +320,22 @@ def processBatch(batchFile):
         data = f.readlines()
         if len(data) == 1:
             data = data[0].split(',')
+            count = 0
+            totalUrl = len(data)
             for url in data:
                 url = url.strip()
-                print(f"Processing {url}...")
+                count += 1
+                print(f"[{count}/{total}] Processing {url}...")
                 ASIN = songling(url)
             exit(0)
         else:
+            count = 0
+            totalUrl = len(data)
             for url in data:
                 url = url.strip()
                 url = url.replace(',', "")
-                print(f"Processing {url}...")
+                count += 1
+                print(f"[{count}/{total}] Processing {url}...")
                 ASIN = songling(url)
             exit(0)
 
