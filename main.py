@@ -94,7 +94,7 @@ def scraping(inUrl):
 def ddgsScrapper(songName):
     print("\x1b[2J\x1b[H", end="")
     print('Initiating Stage 1 of Manual Search - DuckDuckGo Search\n')
-    results = DDGS().text("site:music.amazon.com " + songName + "/track/", max_results=1)
+    results = DDGS().text("site:music.amazon.com " + str(songName) + "/track/", max_results=1)
     ftHref = results[0]['href']
     print(f"\nFound Link: {ftHref}")
     print('Validating Link...')
@@ -223,7 +223,8 @@ def createConfig():
             'launchNumber' : 0,
             'Browser':'chrome',
             'location': r'C:\Program Files\Google\Chrome\Application\chrome.exe',
-            'saveLocation': 'Complete_Download'
+            'saveLocation': 'Complete_Download',
+            'batchDownload': False
         }
     with open(configFile, 'w') as configfile:
         config.write(configfile)
@@ -235,7 +236,8 @@ def configMode():
         print('Current Settings')
         print(f'''Browser = {config['parameters']['Browser']}
 Location = {config['parameters']['location']}
-Save Location = {config['parameters']['saveLocation']}''')
+Save Location = {config['parameters']['saveLocation']}
+Batch Wise Download = {config['parameters']['batchDownload']}''')
         while True:
             time.sleep(0.5)
             change = input("\nEnter '1' to change or '0' to leave as it is: ").strip()
@@ -270,6 +272,22 @@ Save Location = {config['parameters']['saveLocation']}''')
                         print('Invalid Input')
                         continue
                     break
+                while True:
+                    choice = input("Do You need to enable batch Download (y/n): ")
+                    if choice.lower() == 'y':
+                        config['parameters']['batchDownload'] = 'True'
+                        print('\nBatch Download Enabled\n')
+                        time.sleep(1)
+                        break
+                    elif choice.lower() == 'n':
+                        config['parameters']['batchDownload'] = 'False'
+                        print('\nBatch Download disabled\n')
+                        time.sleep(1)
+                        break
+                    else:
+                        print("bruh? You can't invent options...")
+                        time.sleep(2)
+                        continue
                 if file_path:
                     print(f"Selected file: {file_path}")
                     browser = file_path.split('/')[-1].split('.')[0]
@@ -291,13 +309,49 @@ Save Location = {config['parameters']['saveLocation']}''')
     else:
         createConfig()
         iniconfig()
-    
+
+
+def processBatch(batchFile):
+    with open(batchFile, 'r', encoding='utf-8') as f:
+        data = f.readlines()
+        if len(data) == 1:
+            data = data[0].split(',')
+            for url in data:
+                url = url.strip()
+                print(f"Processing {url}...")
+                ASIN = songling(url)
+        else:
+            for url in data:
+                url = url.strip()[:-1]
+                print(f"Processing {url}...")
+                ASIN = songling(url)
+
+            
+
+
 def downloadMode():
     launch_count = int(config['parameters'].get('launchNumber', '0'))
     config['parameters']['launchNumber'] = str(launch_count + 1)
     with open(configFile, 'w') as configfile: 
         config.write(configfile)
     time.sleep(0.5)
+    if config.getboolean('parameters', 'batchDownload'):
+        while True:
+            print('\nSelect the txt file containing all song link seperated my comma (Only Spotify or Apple Music urls)\n')
+            time.sleep(1)
+            batchFile = filedialog.askopenfilename(
+                filetypes=[('Text File', '*.txt')],
+                title= 'Select a file'
+            )
+            if batchFile:
+                print("Got the batch ")
+                time.sleep(1)
+                break
+            else:
+                continue
+        processBatch(batchFile)
+    else:
+        pass
     inUrl = input("Enter the URL(Spotify & Apple Music Only): ")
     time.sleep(0.5)
     print('Url accepted, seaching for the song...')
