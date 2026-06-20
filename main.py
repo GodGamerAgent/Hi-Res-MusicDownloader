@@ -92,15 +92,18 @@ def scraping(inUrl):
         print("Unsupported URL")
 
 def ddgsScrapper(songName):
-    print("\x1b[2J\x1b[H", end="")
-    print('Initiating Stage 1 of Manual Search - DuckDuckGo Search\n')
-    results = DDGS().text("site:music.amazon.com " + str(songName) + "/track/", max_results=1)
-    ftHref = results[0]['href']
-    print(f"\nFound Link: {ftHref}")
-    print('Validating Link...')
-    if "/tracks/" in ftHref:
-        return ftHref.split('/')[-1][:10], 200
-    else:
+    try:
+        print("\x1b[2J\x1b[H", end="")
+        print('Initiating Stage 1 of Manual Search - DuckDuckGo Search\n')
+        results = DDGS().text("site:music.amazon.com " + str(songName) + "/track/", max_results=1)
+        ftHref = results[0]['href']
+        print(f"\nFound Link: {ftHref}")
+        print('Validating Link...')
+        if "/tracks/" in ftHref:
+            return ftHref.split('/')[-1][:10], 200
+        else:
+            return None, 404 
+    except Exception as e:
         return None, 404 
 
 def scrapper2(songName):
