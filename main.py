@@ -215,10 +215,16 @@ def downloadViaLucida(ASIN):
         sb.activate_cdp_mode()
         sb.goto(lucidaUrl)
         captchaCheck()
-        sb.wait_for_element_visible("button.download-button", timeout=30)
-        sb.sleep(2)
-        sb.click("button.download-button")
-        sb.sleep(2)
+        while True:
+            try:
+                sb.wait_for_element_visible("button.download-button", timeout=30)
+                sb.sleep(2)
+                sb.click("button.download-button")
+                sb.sleep(2)
+                break
+            except Exception as e:
+                sb.refresh()
+                continue
         downloadCheck(download_dir)
         sb.sleep(2)
         
@@ -325,7 +331,7 @@ def processBatch(batchFile):
             for url in data:
                 url = url.strip()
                 count += 1
-                print(f"[{count}/{total}] Processing {url}...")
+                print(f"[{count}/{totalUrl}] Processing {url}...")
                 ASIN = songling(url)
             exit(0)
         else:
@@ -335,7 +341,7 @@ def processBatch(batchFile):
                 url = url.strip()
                 url = url.replace(',', "")
                 count += 1
-                print(f"[{count}/{total}] Processing {url}...")
+                print(f"[{count}/{totalUrl}] Processing {url}...")
                 ASIN = songling(url)
             exit(0)
 
